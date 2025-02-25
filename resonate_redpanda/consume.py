@@ -1,4 +1,6 @@
 import json
+from random import randint
+from time import sleep
 from typing import Any, Generator
 import click
 from kafka import KafkaConsumer
@@ -19,25 +21,30 @@ resonate = Resonate(store=LocalStore())
 
 
 def sum(ctx: Context, a: int, b: int) -> int:
+    sleep(randint(0, 2))
     return a + b
 
 
 def sub(ctx: Context, a: int, b: int) -> int:
+    sleep(randint(0, 2))
     return a - b
 
 
 def mul(ctx: Context, a: int, b: int) -> int:
+    sleep(randint(0, 2))
     return a * b
 
 
-def enqueue(ctx: Context, op: str, a: int, b: int, v: int) -> None:
-    producer.send("bar", value=json.dumps((op, a, b, v)))
+def enqueue(ctx: Context, op: str, a: int, b: int, v: int, id: str) -> None:
+    producer.send("bar", value=json.dumps((op, a, b, v, id)))
     producer.flush()
     print("sent to next queue")
 
 
 @resonate.register
-def calc(ctx: Context, op: str, a: int, b: int) -> Generator[Yieldable, Any, None]:
+def calc(
+    ctx: Context, op: str, a: int, b: int, id: str
+) -> Generator[Yieldable, Any, None]:
     match op:
         case "sum":
             v: int = yield ctx.lfc(sum, a, b)
@@ -48,7 +55,7 @@ def calc(ctx: Context, op: str, a: int, b: int) -> Generator[Yieldable, Any, Non
         case _:
             raise ValueError("Unexpected operation")
 
-    yield ctx.lfc(enqueue, op, a, b, v)
+    yield ctx.lfc(enqueue, op, a, b, v, id)
 
 
 @click.command()
@@ -74,7 +81,7 @@ def consume() -> None:
                 id = f"processing-{message.offset}"
                 print(f"Processing: {id}")
 
-                calc.run(id, op, a, b)
+                calc.run(id, op, a, b, id)
 
                 # Commit after successful processing
                 # consumer.commit()
