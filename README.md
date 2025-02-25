@@ -3,7 +3,7 @@
 cd redpanda && docker compose up
 
 # Terminal 2 - Consumer
-resonate-redpanda run
+resonate-redpanda consume
 
 # Terminal 3 - Producer
 resonate-redpanda produce -n 10

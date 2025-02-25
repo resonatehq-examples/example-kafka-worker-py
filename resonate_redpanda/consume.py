@@ -52,7 +52,7 @@ def calc(ctx: Context, op: str, a: int, b: int) -> Generator[Yieldable, Any, Non
 
 
 @click.command()
-def run() -> None:
+def consume() -> None:
     consumer = KafkaConsumer(
         "foo",
         bootstrap_servers=BOOTSTRAP_SERVERS,

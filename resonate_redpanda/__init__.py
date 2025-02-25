@@ -1,6 +1,6 @@
 import click
 from resonate_redpanda.produce import produce
-from resonate_redpanda.run import run
+from resonate_redpanda.consume import consume
 
 
 @click.group()
@@ -9,7 +9,7 @@ def cli() -> None:
 
 
 cli.add_command(produce)
-cli.add_command(run)
+cli.add_command(consume)
 
 
 def main() -> None:
