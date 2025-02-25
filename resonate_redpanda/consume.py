@@ -69,7 +69,7 @@ def consume() -> None:
         sasl_plain_password=SASL_PLAIN_PASSWORD,
         group_id=None,
         auto_offset_reset="earliest",
-        enable_auto_commit=False,
+        enable_auto_commit=True,
         value_deserializer=lambda x: x.decode("utf-8"),
         max_poll_records=100,  # Control batch size
     )
@@ -82,10 +82,6 @@ def consume() -> None:
                 print(f"Processing: {id}")
 
                 calc.run(id, op, a, b, id)
-
-                # Commit after successful processing
-                # consumer.commit()
-                # print(f"Committed offset {message.offset}")
 
             except Exception as e:
                 print(f"Failed to process message: {e}")

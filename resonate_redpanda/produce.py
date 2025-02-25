@@ -1,7 +1,8 @@
 import json
 import click
-from kafka.consumer.fetcher import random
+
 from resonate_redpanda.config import producer
+import random
 
 
 @click.command()
