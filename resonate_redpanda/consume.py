@@ -77,11 +77,8 @@ def consume() -> None:
     try:
         for message in consumer:
             try:
-                op, a, b = json.loads(message.value)
-                id = f"processing-{message.offset}"
-                print(f"Processing: {id}")
-
-                calc.run(id, op, a, b, id)
+                msg_id, op, a, b = json.loads(message.value)
+                calc.run(msg_id, op, a, b, msg_id)
 
             except Exception as e:
                 print(f"Failed to process message: {e}")
