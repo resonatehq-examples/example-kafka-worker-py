@@ -21,13 +21,13 @@ This example application showcases an integration between RedPanda and Resonate 
 
 ![RedPanda+Resonate component diagram](./static/redpanda+resonate-component-diagram.png)
 
-To illustrate these points, the Resonate Application Node in this example app pretends to be a tombstone cleanup processor. It pulls messages off a topic / queue, each message containing the ID of a tombstone that needs to be permanently deleted. We don't know the size (how many rows of data) of the tombstone, and the application simulates a random size. Once the operation is complete, and the tombstone data deleted, the application node puts a new message onto a different queue where we can assume some other processor would then take the next steps, perhaps notifying someone of deletion.
+To illustrate these points, the Resonate Application Node in this example app pretends to be a tombstone cleanup processor. It pulls messages off a topic / queue, each message containing the ID of a tombstone that needs to be permanently deleted. We don't know how much data is related the tombstone ID, so the application simulates a random amount. Once the operation is complete, and the tombstone data deleted, the application node puts a new message onto a different queue where we can assume some other processor would then take the next steps, perhaps notifying someone of deletion.
 
 ### Application flow details
 
-In this example we have a producer script (record_producer) which creates a set of messages, each containing a unique ID, and puts them onto a RedPanda topic / queue named "tombstones".
+In this example we have a producer script (record_producer) which creates a set of messages, each containing a unique ID, and puts the messages onto a RedPanda topic / queue named "tombstones".
 
-Then we have a consumer process (record_processor) which pulls messages off the tombstone topic / queue and simulates a batch deletion of data associated with the IDs. The application assumes that there is no way to know how much data there is to delete related to a tombstone ID. So the `delete()` function simulates the following:
+Then we have a consumer process (record_processor) which pulls messages off the tombstone topic / queue and simulates a batch deletion of data associated with the IDs. The application assumes that there is no way to know how much data there is to delete in relation to a tombstone ID. So the `delete()` function simulates the following:
 
 1. A 25% chance of encountering an error while deleting the rows. This is to showcase Resonate's automatic function execution retry feature.
 2. A 25% chance that any given batch deletion has deleted all remaining rows associated with the tombstone ID.
@@ -35,7 +35,7 @@ Then we have a consumer process (record_processor) which pulls messages off the 
 The Resonate Application Node (record processor) pulls messages off the queue in the order in which the are placed there (FIFO) and kicks off a operation for each message that it pulls off.
 
 Once a processing workflow indicates that there are no more rows to delete associated with the tombstone ID, it will put a new message onto a different topic / queue which we can assume will be monitored by some other processing node that might notify someone or something that the data is deleted.
-The message on that topic / queue will include the offset of produced message. This will enable us to see how the ordering changed from first of the tombstone topic / queue to first onto the processed topic / queue.
+The message on that topic / queue will include the offset of produced message. This will enable us to see how the ordering changed with the first message off of the tombstone topic / queue to the first message onto the processed topic / queue.
 
 The Resonate SDK is built so that new processing workflows can be invoked at any time, even if existing processing workflows are in progress.
 
@@ -50,6 +50,7 @@ Or, try running multiple record_processor processes. Try killing the one taking 
 ## How to run the example
 
 This application uses [uv](https://docs.astral.sh/uv/) as the python environment and package manager.
+This application requires Docker and Docker Compose.
 
 Run the Resonate Server:
 
