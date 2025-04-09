@@ -1,20 +1,25 @@
 import click
 import json
 import uuid
-import random
 from .config import producer
 
 
 @click.command()
-@click.option("-n", type=click.IntRange(min=1), required=True, help="Number of records to produce")
+@click.option(
+    "-n",
+    type=click.IntRange(min=1),
+    required=True,
+    help="Number of tombstone records to produce",
+)
 def main(n: int) -> None:
+    # We produce messages that contains an ID
+    # The ID is meant to represent a tombstone record
+    # The tombstone record represents an unknown number of rows to be deleted
     messages = [
         (
             uuid.uuid4().hex,
-            i,
-            random.randint(1, 90),
         )
-        for i in range(n)
+        for _ in range(n)
     ]
 
     for msg in messages:
