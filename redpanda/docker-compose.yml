@@ -51,7 +51,17 @@ services:
       - 19092:19092
       - 19644:9644
     healthcheck:
-      test: ["CMD", "rpk", "cluster", "info", "-X", "user=superuser", "-X", "pass=secretpassword"]
+      test:
+        [
+          "CMD",
+          "rpk",
+          "cluster",
+          "info",
+          "-X",
+          "user=superuser",
+          "-X",
+          "pass=secretpassword",
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -174,10 +184,8 @@ services:
           plain:
             enabled: true
             credentials:
-            - username: "jane"
-              password: "some-other-secret-password"
-            - username: "john"
-              password: "some-secret-password"
+            - username: "the_dude"
+              password: "white_russian"
         enterprise:
           # Configures role-based access control to data and features in Redpanda Console.
           # See https://docs.redpanda.com/current/console/config/security/authorization/
