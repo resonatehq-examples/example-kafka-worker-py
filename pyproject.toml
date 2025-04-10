@@ -1,7 +1,7 @@
 [project]
-name = "tombstone-cleanup"
+name = "batch-record-deletion"
 version = "0.1.0"
-description = "Kafka-based distributed processor"
+description = "Batch record deletion use-case example application showcasing RedPanda + Resonate."
 readme = "README.md"
 authors = [{ name = "Resonate HQ", email = "contact@resonatehq.io" }]
 requires-python = ">=3.11"  # 3.13 is too new for many packages including uv; downgrade for stability
@@ -14,7 +14,7 @@ dependencies = [
 
 [project.scripts]
 record-producer = "record_producer.produce:main"
-record-processor = "record_processor.processor:main"
+record-deletor = "record_deletor.delete:main"
 setup-topics = "setup.setup_topics:main"
 
 [build-system]

@@ -9,12 +9,12 @@ from .config import producer
     "-n",
     type=click.IntRange(min=1),
     required=True,
-    help="Number of tombstone records to produce",
+    help="Number of records to produce",
 )
 def main(n: int) -> None:
     # We produce messages that contains an ID
-    # The ID is meant to represent a tombstone record
-    # The tombstone record represents an unknown number of rows to be deleted
+    # The ID corresponds to a record
+    # The record represents an unknown number of rows to be deleted
     messages = [
         (
             uuid.uuid4().hex,
@@ -23,7 +23,7 @@ def main(n: int) -> None:
     ]
 
     for msg in messages:
-        producer.send("tombstones", value=json.dumps(msg))
+        producer.send("records_to_be_deleted", value=json.dumps(msg))
     producer.flush()
     producer.close()
     click.echo(f"Produced {n} messages.")

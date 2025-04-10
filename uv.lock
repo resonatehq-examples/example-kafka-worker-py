@@ -2,6 +2,35 @@ version = 1
 requires-python = ">=3.11"
 
 [[package]]
+name = "batch-record-deletion"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "click" },
+    { name = "kafka-python" },
+    { name = "resonate-sdk" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pyright", extra = ["nodejs"] },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "click", specifier = ">=8.1.8" },
+    { name = "kafka-python", specifier = ">=2.0.4" },
+    { name = "resonate-sdk", specifier = ">=0.4.12" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pyright", extras = ["nodejs"], specifier = ">=1.1.394" },
+    { name = "ruff", specifier = ">=0.9.7" },
+]
+
+[[package]]
 name = "certifi"
 version = "2025.1.31"
 source = { registry = "https://pypi.org/simple" }
@@ -326,35 +355,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ff/61/c488943414fb2b8754c02f3879de003e26efdd20f38167ded3fb3fc1cda3/ruff-0.11.4-py3-none-win32.whl", hash = "sha256:0e9365a7dff9b93af933dab8aebce53b72d8f815e131796268709890b4a83270", size = 10311496 },
     { url = "https://files.pythonhosted.org/packages/b6/2b/2a1c8deb5f5dfa3871eb7daa41492c4d2b2824a74d2b38e788617612a66d/ruff-0.11.4-py3-none-win_amd64.whl", hash = "sha256:5a9fa1c69c7815e39fcfb3646bbfd7f528fa8e2d4bebdcf4c2bd0fa037a255fb", size = 11399146 },
     { url = "https://files.pythonhosted.org/packages/4f/03/3aec4846226d54a37822e4c7ea39489e4abd6f88388fba74e3d4abe77300/ruff-0.11.4-py3-none-win_arm64.whl", hash = "sha256:d435db6b9b93d02934cf61ef332e66af82da6d8c69aefdea5994c89997c7a0fc", size = 10450306 },
-]
-
-[[package]]
-name = "tombstone-cleanup"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "click" },
-    { name = "kafka-python" },
-    { name = "resonate-sdk" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pyright", extra = ["nodejs"] },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "click", specifier = ">=8.1.8" },
-    { name = "kafka-python", specifier = ">=2.0.4" },
-    { name = "resonate-sdk", specifier = ">=0.4.12" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "pyright", extras = ["nodejs"], specifier = ">=1.1.394" },
-    { name = "ruff", specifier = ">=0.9.7" },
 ]
 
 [[package]]
