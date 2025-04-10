@@ -186,6 +186,8 @@ services:
             credentials:
             - username: "the_dude"
               password: "white_russian"
+            - username: "neo"
+              password: "white_rabbit"
         enterprise:
           # Configures role-based access control to data and features in Redpanda Console.
           # See https://docs.redpanda.com/current/console/config/security/authorization/
@@ -199,14 +201,14 @@ services:
           subjects:
             - kind: user
               provider: Plain
-              name: jane
+              name: the_dude
           roleName: admin
         - metadata:
             name: Software Engineers
           subjects:
             - kind: user
               provider: Plain
-              name: john
+              name: neo
           roleName: editor
     ports:
       - 8080:8080

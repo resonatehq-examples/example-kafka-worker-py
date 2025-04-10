@@ -98,8 +98,14 @@ You can provide any value for n.
 RedPand provides a UI in which you can view the records / messages in the topic queues.
 
 - url: http://localhost:8080
+
 - username: the_dude
 - password: white_russian
+
+or
+
+- username: neo
+- password: white_rabbit
 
 The record-producer script adds records to the records_to_be_deleted topic / queue.
 The rcord-deletor pulls records from the records_to_be_deleted topic / queue and adds them to the records_that_were_deleted topic / queue.
