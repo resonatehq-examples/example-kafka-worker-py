@@ -42,7 +42,7 @@ def process(ctx: Context, tombstone_id: str, offset: int) -> Generator[Yieldable
     while (yield ctx.lfc(delete, tombstone_id)):
         print(f"tombstone {tombstone_id} still has rows to delete")
         # Sleep for 5 seconds to not overwhelm the database
-        ctx.sleep(5)
+        yield ctx.sleep(5)
     print(f"all rows deleted for tombstone {tombstone_id} in position {offset}")
     # Add a new message to another topic indicating that the tombstone has been processed
     yield ctx.lfc(enqueue, tombstone_id, offset)
