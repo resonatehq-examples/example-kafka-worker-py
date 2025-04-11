@@ -1,6 +1,8 @@
 # Batch record deletion
 
-# Resonate + Redpanda example application
+![RedPanda+Resonate header image](./static/Redpanda+Resonate.png)
+
+## Resonate + Redpanda example application
 
 This is an example app showcasing what a RedPanda + Resonate pipeline might look like in the context of a "batch record deletion" use case.
 
