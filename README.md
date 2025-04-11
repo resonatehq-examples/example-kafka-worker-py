@@ -1,6 +1,6 @@
 # Batch record deletion
 
-![RedPanda+Resonate header image](./static/Redpanda+Resonate.png)
+![RedPanda+Resonate header image](./static/redpanda-and-echo.png)
 
 ## Resonate + Redpanda example application
 
