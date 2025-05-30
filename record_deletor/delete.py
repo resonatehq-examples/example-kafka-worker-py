@@ -1,5 +1,5 @@
 from .config import producer, consumer
-from resonate import Resonate, Context
+from resonate import Resonate
 from random import randint
 import json
 
@@ -14,7 +14,7 @@ def delete_batch(_, record_id, batch_size=10):
         return False
     return True
 
-def enqueue(_: Context, msg_id: str, previous_offset: str) -> None:
+def enqueue(_, msg_id, previous_offset):
     payload = json.dumps((msg_id, previous_offset)).encode("utf-8")
     producer.produce("records_that_were_deleted", value=payload)
     producer.flush()
@@ -28,7 +28,7 @@ def workflow(ctx, record_id, offset):
     print(f"all rows deleted for record {record_id} in position {offset}")
     yield ctx.lfc(enqueue, record_id, offset)
 
-def consume() -> None:
+def consume():
     consumer.subscribe(["records_to_be_deleted"])
     try:
         while True:
@@ -51,7 +51,7 @@ def consume() -> None:
     finally:
         consumer.close()
 
-def main() -> None:
+def main():
     print("processor running")
     consume()
 
