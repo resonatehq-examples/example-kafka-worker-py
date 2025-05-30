@@ -1,16 +1,18 @@
-import click
-from kafka.admin import NewTopic
-from .config import admin
+# setup_topics.py
+from confluent_kafka.admin import AdminClient, NewTopic
 
-@click.command()
+admin = AdminClient({"bootstrap.servers": "localhost:9092"})
+
 def main():
-    try:
-        admin.create_topics([
-            NewTopic(name="records_to_be_deleted", num_partitions=1, replication_factor=1),
-            NewTopic(name="records_that_were_deleted", num_partitions=1, replication_factor=1),
-        ])
-    except Exception as e:
-        click.echo(f"Error: {e}")
-    finally:
-        click.echo("Kafka topics created.")
-        admin.close()
+    # Create topics
+    futures = admin.create_topics([
+        NewTopic("records_to_be_deleted", num_partitions=1, replication_factor=1),
+        NewTopic("records_that_were_deleted", num_partitions=1, replication_factor=1),
+    ])
+
+    for topic, future in futures.items():
+        try:
+            future.result()
+            print(f"Topic {topic} created.")
+        except Exception as e:
+            print(f"Failed to create topic {topic}: {e}")

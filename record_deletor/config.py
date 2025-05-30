@@ -1,28 +1,19 @@
-from kafka import KafkaProducer
+# config.py
+from confluent_kafka import Producer, Consumer
 
-BOOTSTRAP_SERVERS = ["localhost:19092"]
-SECURITY_PROTOCOL = "SASL_PLAINTEXT"
-SASL_MECHANISM = "SCRAM-SHA-256"
-SASL_PLAIN_USERNAME = "superuser"
-SASL_PLAIN_PASSWORD = "secretpassword"
+BOOTSTRAP_SERVERS = "localhost:9092"
 
-consumer = {
-    "bootstrap_servers": BOOTSTRAP_SERVERS,
-    "security_protocol": SECURITY_PROTOCOL,
-    "sasl_mechanism": SASL_MECHANISM,
-    "sasl_plain_username": SASL_PLAIN_USERNAME,
-    "sasl_plain_password": SASL_PLAIN_PASSWORD,
-    "group_id": "record_consumer_group",
-    "auto_offset_reset": "earliest",
-    "enable_auto_commit": True,
-    "value_deserializer": lambda x: x.decode("utf-8"),
+producer_config = {
+    "bootstrap.servers": BOOTSTRAP_SERVERS,
 }
 
-producer = KafkaProducer(
-    bootstrap_servers=BOOTSTRAP_SERVERS,
-    security_protocol=SECURITY_PROTOCOL,
-    sasl_mechanism=SASL_MECHANISM,
-    sasl_plain_username=SASL_PLAIN_USERNAME,
-    sasl_plain_password=SASL_PLAIN_PASSWORD,
-    value_serializer=lambda v: v.encode("utf-8"),
-)
+producer = Producer(producer_config)
+
+consumer_config = {
+    "bootstrap.servers": BOOTSTRAP_SERVERS,
+    "group.id": "record_consumer_group",
+    "auto.offset.reset": "earliest",
+    "enable.auto.commit": True,
+}
+
+consumer = Consumer(consumer_config)

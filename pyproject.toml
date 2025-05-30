@@ -4,12 +4,12 @@ version = "0.1.0"
 description = "Batch record deletion use-case example application showcasing RedPanda + Resonate."
 readme = "README.md"
 authors = [{ name = "Resonate HQ", email = "contact@resonatehq.io" }]
-requires-python = ">=3.11"  # 3.13 is too new for many packages including uv; downgrade for stability
+requires-python = ">=3.12"  # 3.13 is too new for many packages including uv; downgrade for stability
 
 dependencies = [
     "click>=8.1.8",
-    "kafka-python>=2.0.4",
-    "resonate-sdk>=0.4.12",
+    "confluent-kafka>=2.10.0",
+    "resonate-sdk>=0.5.3",
 ]
 
 [project.scripts]
