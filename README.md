@@ -6,7 +6,7 @@
 
 This is an example app showcasing what a RedPanda + Resonate pipeline might look like in the context of a "batch record deletion" use case.
 
-## Use case
+### Use case
 
 Imagine a worker process that pulls messages from a queue, performs the requested task, and then pushes a completion message to another queue.
 
@@ -25,7 +25,7 @@ This example application showcases an integration between RedPanda and Resonate 
 
 ![RedPanda+Resonate component diagram](./static/redpanda+resonate-component-diagram.png)
 
-To illustrate these points, the Resonate Application Node in this example app pretends to be a process that deletes records. It pulls messages off a topic / queue, each message containing the ID of a record that needs to be permanently deleted. We don't know how much data is related the record ID, so the application simulates a random amount. Once the operation is complete, and the data deleted, the application node puts a new message onto a different queue where we can assume some other component would then take the next steps, perhaps notifying someone of deletion.
+To illustrate these points, the Resonate Application Node in this example app pretends to be a process that deletes records. It pulls messages off a topic / queue, each message containing the ID of a record that needs to be permanently deleted. We don't know how much data is related to the record ID, so the application simulates a random amount. Once the operation is complete, and the data deleted, the application node puts a new message onto a different queue where we can assume some other component would then take the next steps, perhaps notifying someone of deletion.
 
 ### Application flow details
 
@@ -34,12 +34,12 @@ In this example we have a producer script (record_producer) which creates a set 
 Then we have a consumer process (record_deletor) which pulls messages off the records_to_be_deleted topic / queue and simulates a batch deletion of data associated with the IDs. The application assumes that there is no way to know how much data there is to delete in relation to a record ID. So the `batch_delete()` function simulates the following:
 
 1. A 25% chance of encountering an error while deleting the rows. This is to showcase Resonate's automatic function execution retry feature.
-2. A 25% chance that any given batch deletion has deleted all remaining rows associated with the record ID.
+2. A 25% chance that any given batch deletion has deleted all remaining rows associated with the record ID. That is — on each attempt to delete rows for a given ID, there is a 25% chance that the workflow completes for that ID, which realistically simulates an unknown amount of time.
 
-The Resonate Application Node (record_deletor) pulls messages off the queue in the order in which the are placed there (FIFO) and kicks off a workflow for each message that it pulls off.
+The Resonate Application Node (record_deletor) pulls messages off the queue (records_to_be_deleted) in the order in which the are placed there (FIFO) and kicks off a workflow for each message that it pulls off.
 
-Once there is an indication that there are no more rows to delete associated with the record ID, the workflow will put a new message onto a different topic / queue which we can assume will be monitored by some other processing node that might notify someone or something that the data is deleted.
-The message on that topic / queue will include the offset of produced message. This will enable us to see how the ordering changed with the first message off of the records_to_be_deleted topic / queue to the first message onto the records_that_were_deleted topic / queue.
+When there are no more rows to delete, the workflow puts a new message onto a different topic / queue which we can assume will be monitored by some other processing node that might notify someone or something that the data is deleted.
+The message on that topic / queue will include the offset of the produced message and this will enable us to see how the ordering changed with the first message off of the records_to_be_deleted topic / queue to the first message onto the records_that_were_deleted topic / queue.
 
 The Resonate SDK is built so that new workflows can be invoked at any time, even if existing workflows are in progress.
 
