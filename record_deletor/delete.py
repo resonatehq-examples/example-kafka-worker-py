@@ -3,7 +3,7 @@ from resonate import Resonate
 from random import randint
 import json
 
-resonate = Resonate()
+resonate = Resonate.remote()
 
 def delete_batch(_, record_id, batch_size=10):
     print(f"deleting a batch of rows related to record {record_id}")
@@ -52,6 +52,7 @@ def consume():
         consumer.close()
 
 def main():
+    resonate.start()
     print("processor running")
     consume()
 
