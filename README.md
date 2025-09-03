@@ -2,6 +2,8 @@
 
 # Dead Simple Kafka Worker
 
+**Resonate Python SDK**
+
 This example app uses Redpanda as the drop-in replacement for an actual Apache Kafka implementation.
 It showcases what a RedPanda + Resonate pipeline might look like in the context of a "batch record deletion" use case.
 
