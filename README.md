@@ -1,10 +1,11 @@
-# Batch record deletion
+![RedPanda+Resonate header image](assets/kafka-worker-readme-banner.png)
 
-![RedPanda+Resonate header image](./static/redpanda-and-echo.png)
+# Dead Simple Kafka Worker
 
-## Resonate + Redpanda example application
+This example app uses Redpanda as the drop-in replacement for an actual Apache Kafka implementation.
+It showcases what a RedPanda + Resonate pipeline might look like in the context of a "batch record deletion" use case.
 
-This is an example app showcasing what a RedPanda + Resonate pipeline might look like in the context of a "batch record deletion" use case.
+Instructions on [How to run this example](#how-to-run-the-example) are below.
 
 ### Use case
 
@@ -23,7 +24,7 @@ The bottom line is a worker node sitting between two queues should do two things
 
 This example application showcases an integration between RedPanda and Resonate where Resonate does both of those things, extending the durability RedPanda provides to span between the RedPanda topics and efficiently making progress on operations without blocking on the head-of-the-line message.
 
-![RedPanda+Resonate component diagram](./static/redpanda+resonate-component-diagram.png)
+![RedPanda+Resonate component diagram](/assets/redpanda+resonate-component-diagram.png)
 
 To illustrate these points, the Resonate Application Node in this example app pretends to be a process that deletes records. It pulls messages off a topic / queue, each message containing the ID of a record that needs to be permanently deleted. We don't know how much data is related to the record ID, so the application simulates a random amount. Once the operation is complete, and the data deleted, the application node puts a new message onto a different queue where we can assume some other component would then take the next steps, perhaps notifying someone of deletion.
 
@@ -79,6 +80,12 @@ Set up the topics (optional, running the record_producer and record_deletor will
 
 ```shell
 uv run setup-topics
+```
+
+You may just see this warning if you don't setup the topics before running the record-deletor
+
+```shell
+Consumer error: KafkaError{code=UNKNOWN_TOPIC_OR_PART,val=3,str="Subscribed topic not available: records_to_be_deleted: Broker: Unknown topic or partition"}
 ```
 
 Run the record_deletor:
