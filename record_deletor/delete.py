@@ -22,11 +22,11 @@ def enqueue(_, msg_id, previous_offset):
 @resonate.register
 def workflow(ctx, record_id, offset):
     print(f"processing record {record_id} in position {offset}")
-    while (yield ctx.lfc(delete_batch, record_id)):
+    while (yield ctx.run(delete_batch, record_id)):
         print(f"record {record_id} still has rows to delete")
         yield ctx.sleep(5)
     print(f"all rows deleted for record {record_id} in position {offset}")
-    yield ctx.lfc(enqueue, record_id, offset)
+    yield ctx.run(enqueue, record_id, offset)
 
 def consume():
     consumer.subscribe(["records_to_be_deleted"])
@@ -43,7 +43,7 @@ def consume():
                 record_id = json.loads(msg.value().decode("utf-8"))
                 if isinstance(record_id, str):  # in case json.dumps(msg_id) was just a string
                     record_id = [record_id]
-                workflow.run(record_id[0], record_id[0], msg.offset())
+                _ = workflow.begin_run(record_id[0], record_id[0], msg.offset())
             except Exception as e:
                 print(f"Error processing message: {e}")
     except KeyboardInterrupt:
